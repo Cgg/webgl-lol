@@ -112,7 +112,7 @@ function initWebGL(canvas) {
   let gl = null;
 
   try {
-    gl = canvas.getContext("webgl");
+    gl = canvas.getContext("experimental-webgl");
   } catch (e) {
     const msg = `WebGL not supported lol: ${e}`;
     console.log(msg);
