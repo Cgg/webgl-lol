@@ -1,0 +1,22 @@
+.wrapper {
+  background-color: black;
+  border: 2px solid greenyellow;
+  width: 500px;
+  height: 500px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.overlay {
+  color: #fefefe;
+}
+
+.hidden {
+  display: none;
+}
+
+.interactive {
+  cursor: pointer;
+}

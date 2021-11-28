@@ -1,8 +1,28 @@
 let modelViewMatrix;
 let projectionMatrix;
 const ac = new AudioContext();
+let canvas;
 
 window.onload = function () {
+  canvas = document.getElementById("canvas");
+  const wrapper = document.getElementById("wrapper");
+
+  const launchAnimation = () => {
+    wrapper.removeEventListener("click", launchAnimation);
+    wrapper.classList.remove("interactive");
+
+    const overlay = document.getElementById("overlay");
+    overlay.classList.add("hidden");
+
+    canvas.classList.remove("hidden");
+
+    main();
+  };
+
+  wrapper.addEventListener("click", launchAnimation);
+};
+
+function main() {
   Promise.all([getFile("omar-1.ogg"), getFile("omar-2.ogg")]).then(
     ([omar1, omar2]) => {
       const o1 = ac.createBufferSource();
@@ -11,22 +31,21 @@ window.onload = function () {
       o2.buffer = omar2;
       o2.loop = true;
       o1.start(0);
-      o2.start(omar1.duration + 0.18);
+      o2.start(ac.currentTime + omar1.duration + 0.18);
       o1.connect(ac.destination);
       o2.connect(ac.destination);
     }
   );
 
-  const cvs = document.getElementById("toto");
   let ctx;
   try {
-    ctx = initWebGL(cvs);
+    ctx = initWebGL(canvas);
   } catch (e) {
     console.log(e);
     return;
   }
 
-  ctx.viewport(0, 0, cvs.width, cvs.height);
+  ctx.viewport(0, 0, canvas.width, canvas.height);
 
   modelViewMatrix = mat4.create();
   mat4.translate(modelViewMatrix, modelViewMatrix, [-0.5, -0.5, -5]);
@@ -35,7 +54,7 @@ window.onload = function () {
   mat4.perspective(
     projectionMatrix,
     Math.PI / 4,
-    cvs.width / cvs.height,
+    canvas.width / canvas.height,
     1,
     10000
   );
@@ -43,7 +62,7 @@ window.onload = function () {
   initShader(ctx);
   initTexture(ctx);
   run(ctx, createCube(ctx));
-};
+}
 
 function getFile(url) {
   return new Promise((resolve, reject) => {
