@@ -145,8 +145,8 @@ let shaderProgram,
   shaderModelViewMatrixUniform;
 
 function initShader(gl) {
-  var vertexShader = createShader(gl, vertexShaderSource, "vertex");
-  var fragmentShader = createShader(gl, fragmentShaderSource, "fragment");
+  const vertexShader = createShader(gl, vertexShaderSource, "vertex");
+  const fragmentShader = createShader(gl, fragmentShaderSource, "fragment");
 
   shaderProgram = gl.createProgram();
   gl.attachShader(shaderProgram, vertexShader);
