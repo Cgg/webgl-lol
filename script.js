@@ -3,10 +3,10 @@ let projectionMatrix;
 const ac = new AudioContext();
 
 window.onload = function () {
-  getFile("omar-1.ogg", function (omar1) {
-    getFile("omar-2.ogg", function (omar2) {
-      var o1 = ac.createBufferSource();
-      var o2 = ac.createBufferSource();
+  Promise.all([getFile("omar-1.ogg"), getFile("omar-2.ogg")]).then(
+    ([omar1, omar2]) => {
+      const o1 = ac.createBufferSource();
+      const o2 = ac.createBufferSource();
       o1.buffer = omar1;
       o2.buffer = omar2;
       o2.loop = true;
@@ -14,8 +14,8 @@ window.onload = function () {
       o2.start(omar1.duration + 0.18);
       o1.connect(ac.destination);
       o2.connect(ac.destination);
-    });
-  });
+    }
+  );
 
   const cvs = document.getElementById("toto");
   let ctx;
@@ -45,23 +45,19 @@ window.onload = function () {
   run(ctx, createSquare(ctx));
 };
 
-function getFile(url, callback) {
-  const request = new XMLHttpRequest();
-  request.open("GET", url, true);
-  request.responseType = "arraybuffer";
+function getFile(url) {
+  return new Promise((resolve, reject) => {
+    const request = new XMLHttpRequest();
+    request.open("GET", url, true);
+    request.responseType = "arraybuffer";
 
-  request.onload = function () {
-    ac.decodeAudioData(
-      request.response,
-      function (data) {
-        callback(data, undefined);
-      },
-      function () {
-        callback(undefined, "Error decoding the file " + url);
-      }
-    );
-  };
-  request.send();
+    request.onload = () => {
+      ac.decodeAudioData(request.response, resolve, () =>
+        reject(`Error decoding the file ${url}`)
+      );
+    };
+    request.send();
+  });
 }
 
 function createSquare(gl) {
