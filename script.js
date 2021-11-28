@@ -42,7 +42,7 @@ window.onload = function () {
 
   initShader(ctx);
   initTexture(ctx);
-  run(ctx, createSquare(ctx));
+  run(ctx, createCube(ctx));
 };
 
 function getFile(url) {
@@ -60,7 +60,7 @@ function getFile(url) {
   });
 }
 
-function createSquare(gl) {
+function createCube(gl) {
   const vertexBuf = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuf);
   // prettier-ignore
