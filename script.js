@@ -214,8 +214,6 @@ function updateTexture(gl) {
   gl.bindTexture(gl.TEXTURE_2D, null);
 }
 
-function handleTextureLoaded(gl, texture) {}
-
 function draw(gl, obj) {
   gl.clearColor(0, 0, 0, 1);
   gl.enable(gl.DEPTH_TEST);
